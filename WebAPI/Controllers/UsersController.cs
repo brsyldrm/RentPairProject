@@ -7,19 +7,19 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarImagesController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly ICarImageService _carImageService;
+        private readonly IUserService _userService;
 
-        public CarImagesController(ICarImageService carImageService)
+        public UsersController(IUserService userService)
         {
-            _carImageService = carImageService;
+            _userService = userService;
         }
 
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _carImageService.GetAll();
+            var result = _userService.GetAll();
             if (result.Success)
             {
                 return Ok(result);
@@ -30,7 +30,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var result = _carImageService.Get(id);
+            var result = _userService.Get(id);
             if (result.Success)
             {
                 return Ok(result);
@@ -40,10 +40,9 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("add")]
-        public IActionResult Add(CarImage carImage)
+        public IActionResult Add(User user)
         {
-
-            var result = _carImageService.Add(carImage);
+            var result = _userService.Add(user);
             if (result.Success)
             {
                 return Ok(result);
@@ -53,9 +52,9 @@ namespace WebAPI.Controllers
 
 
         [HttpDelete("delete")]
-        public IActionResult Delete(CarImage carImage)
+        public IActionResult Delete(User user)
         {
-            var result = _carImageService.Add(carImage);
+            var result = _userService.Add(user);
             if (result.Success)
             {
                 return Ok(result);
@@ -64,9 +63,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(CarImage carImage)
+        public IActionResult Update(User user)
         {
-            var result = _carImageService.Update(carImage);
+            var result = _userService.Update(user);
             if (result.Success)
             {
                 return Ok(result);

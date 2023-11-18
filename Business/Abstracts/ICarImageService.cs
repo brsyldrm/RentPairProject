@@ -1,6 +1,7 @@
 ﻿
 using Core.Utilities.Results;
 using Entities.Concretes;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Abstracts
 {
@@ -11,5 +12,6 @@ namespace Business.Abstracts
         IResult Delete(CarImage carImage);
         IDataResult<List<CarImage>> GetAll();
         IDataResult<CarImage> Get(int id);
+        IDataResult<bool> Upload(List<IFormFile> files);
     }
 }
