@@ -40,13 +40,17 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("add")]
-        public IActionResult Add(CarImage carImage)
+        public IActionResult Add(List<IFormFile> files,CarImage carImage)
         {
-
-            var result = _carImageService.Add(carImage);
-            if (result.Success)
+            int i = 0;
+            foreach (var file in files)
             {
-                return Ok(result);
+                _carImageService.Add(file,carImage);              ///Düzenlenecek
+                i++;
+            }
+            if (files.Count == i)
+            {
+                return Ok();
             }
             return BadRequest();
         }

@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Constants;
+using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -19,7 +21,7 @@ namespace Business.Concretes
 
         public IResult Add(IFormFile file, CarImage carImage)
         {
-            
+
             carImage.ImagePath = _fileHelper.Upload(file, PathConstants.ImagesPath);
             carImage.ImageDate = DateTime.UtcNow;
             _carImageDal.Add(carImage);
@@ -28,11 +30,13 @@ namespace Business.Concretes
 
         public IResult Delete(CarImage carImage)
         {
+            _fileHelper.Delete(PathConstants.ImagesPath + carImage.ImagePath); // İmagePath Benim dosyamı belirttiğim yol yani wwwroot içinde
             _carImageDal.Delete(carImage);
             return new SuccessResult();
         }
-        public IResult Update(CarImage carImage)
+        public IResult Update(IFormFile file, CarImage carImage)
         {
+            carImage.ImagePath = _fileHelper.Update(file, PathConstants.ImagesPath + carImage.ImagePath, PathConstants.ImagesPath);
             _carImageDal.Update(carImage);
             return new SuccessResult();
         }
@@ -47,33 +51,6 @@ namespace Business.Concretes
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
         }
 
-        public IDataResult<bool> Upload(List<IFormFile> files)
-        {
-            if (files == null || files.Count == 0)
-                return new ErrorDataResult<bool>(false);
-
-            var yuklemeDizini = "YuklenenDosyalar"; // İstediğiniz bir dizin adı
-            var yuklemeYolu = Path.Combine(Directory.GetCurrentDirectory(), yuklemeDizini);
-
-            if (!Directory.Exists(yuklemeYolu))
-                Directory.CreateDirectory(yuklemeYolu);
-
-            foreach (var dosya in files)
-            {
-                if (dosya.Length == 0)
-                    continue;
-
-                var dosyaYolu = Path.Combine(yuklemeYolu, dosya.FileName);
-
-                using (var stream = new FileStream(dosyaYolu, FileMode.Create))
-                {
-                    dosya.CopyTo(stream);
-                }
-            }
-
-            return true;
-        }
-
     }
 }
-}
+
